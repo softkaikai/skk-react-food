@@ -2,9 +2,28 @@ import React, { useState } from 'react';
 import style from './login.module.css';
 import classnames from 'classnames';
 
-import { Form, Icon, Button } from 'semantic-ui-react'
+import { Form, Icon, Button } from 'semantic-ui-react';
+
+import { loginApi } from '../../fetch/login/login';
 
 export default function Login() {
+
+    const [phone, setPhone] = useState('');
+    const [password, setPassword] = useState('');
+    const inputChange = function(field, e, data) {
+        if (field === 'phone') {
+            setPhone(data.value);
+        } else {
+            setPassword(data.value);
+        }
+    };
+
+    const login = function() {
+        loginApi().then(data => console.log(data))
+        console.log(phone);
+        console.log(password);
+    };
+
     return (
         <div className={style["login-box"]}>
             <div className={style["login-center"]}>
@@ -15,17 +34,17 @@ export default function Login() {
                     <div className={style["login-item"]}>
                         <Form.Group>
                             <Icon color='orange' name='mobile alternate' size='big' />
-                            <Form.Input placeholder='your account' width={12} />
+                            <Form.Input onChange={(e, data) => {inputChange('phone', e, data)}} placeholder='your account' width={12} />
                         </Form.Group>
                     </div>
                     <div className={style["login-item"]}>
                         <Form.Group>
                             <Icon color='blue' name='home' size='big' />
-                            <Form.Input type='password' placeholder='your password' width={12} />
+                            <Form.Input onChange={(e, data) => {inputChange('password', e, data)}} type='password' placeholder='your password' width={12} />
                         </Form.Group>
                     </div>
                     <div>
-                        <Button basic color='orange' content='登录' />
+                        <Button onClick={login} basic color='orange' content='登录' />
                         <Button basic color='yellow' content='注册' />
                         <Button basic color='olive' content='注销' />
                         <Button basic color='green' content='找回' />
