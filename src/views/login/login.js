@@ -3,11 +3,10 @@ import style from './login.module.css';
 import classnames from 'classnames';
 
 import { Form, Icon, Button } from 'semantic-ui-react';
+import { toast } from 'react-toastify';
+import { loginApi, registerApi } from '../../fetch/login/login';
 
-import { loginApi } from '../../fetch/login/login';
-
-export default function Login() {
-
+export default function Login(props) {
     const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const inputChange = function(field, e, data) {
@@ -19,9 +18,25 @@ export default function Login() {
     };
 
     const login = function() {
-        loginApi().then(data => console.log(data))
-        console.log(phone);
-        console.log(password);
+
+        loginApi({phone, password}).then(data => {
+            if (data.code === '0') {
+                props.history.push('/main', {name: 'kaikai', age: 123});
+            } else {
+                toast.error(data.msg);
+            }
+        });
+    };
+
+    const register = function() {
+        registerApi({phone, password}).then(data => {
+            if (data.code === '0') {
+                toast.success('注册成功！');
+                props.history.push('/main');
+            } else {
+                toast.error(data.msg);
+            }
+        });
     };
 
     return (
@@ -45,7 +60,7 @@ export default function Login() {
                     </div>
                     <div>
                         <Button onClick={login} basic color='orange' content='登录' />
-                        <Button basic color='yellow' content='注册' />
+                        <Button onClick={register} basic color='yellow' content='注册' />
                         <Button basic color='olive' content='注销' />
                         <Button basic color='green' content='找回' />
                         <Button basic color='teal' content='投诉' />

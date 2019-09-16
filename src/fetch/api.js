@@ -9,14 +9,14 @@ export default function(reqData) {
         'Content-Type': 'application/json'
     };
     if (reqData.contentType === 'ajax') {
-        headers['Content-Type'] = 'application/x-www-form-urlencoded'
+        headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        body = qs.stringify(reqData.data);
+    } else {
+        body = JSON.stringify(reqData.data);
     }
 
     if (reqData.method) {
         method = reqData.method.toUpperCase();
-        body = qs.stringify(reqData.data);
-    } else {
-        body = JSON.stringify(reqData.data);
     }
 
     return fetch(url, {
